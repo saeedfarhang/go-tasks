@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -146,7 +148,27 @@ func deleteCompletedTasks() {
 }
 
 func clearScreen() {
-	fmt.Print("\033[H\033[2J")
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("cmd", "/c", "cls") // Windows
+	} else {
+		cmd = exec.Command("clear") // Linux/macOS
+	}
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+func clearMenu() {
+	// Move cursor to the start of the menu area
+	fmt.Print("\033[10;1H") // Move cursor to line 10, column 1 (adjust as needed)
+
+	// Clear the menu area by printing empty lines
+	for i := 0; i < 30; i++ { // Adjust the number of lines as needed
+		fmt.Println("a\033[K") // Clear the current line
+	}
+
+	// Move cursor back to the start of the menu area
+	fmt.Print("\033[10;1H")
 }
 
 func menuNavigation() int {
@@ -167,6 +189,7 @@ func menuNavigation() int {
 	for {
 		clearScreen()
 		listTasks()
+
 		fmt.Println("Use UP/DOWN arrows to navigate, ENTER to select:")
 		for i, option := range options {
 			if i == selected {
