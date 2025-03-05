@@ -29,7 +29,14 @@ var db *sql.DB
 
 func initDB() {
 	var err error
-	db, err = sql.Open("sqlite3", "todo.db")
+	homePath := os.Getenv("HOME")
+	var sqlPath string
+	if homePath != "" {
+		sqlPath = homePath + "/todo.db"
+	} else {
+		sqlPath = "todo.db"
+	}
+	db, err = sql.Open("sqlite3", sqlPath)
 	if err != nil {
 		log.Fatal(err)
 	}
