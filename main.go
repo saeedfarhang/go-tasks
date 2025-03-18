@@ -18,133 +18,6 @@ import (
 
 var db *sql.DB
 
-// func initDB() {
-// 	var err error
-// 	homePath := os.Getenv("HOME")
-// 	var sqlPath string
-// 	if homePath != "" {
-// 		sqlPath = homePath + "/todo.db"
-// 	} else {
-// 		sqlPath = "todo.db"
-// 	}
-// 	db, err = sql.Open("sqlite3", sqlPath)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	query := `CREATE TABLE IF NOT EXISTS tasks (
-// 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-// 		title TEXT,
-// 		description TEXT,
-// 		completed BOOLEAN,
-// 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-// 		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-// 	);`
-
-// 	_, err = db.Exec(query)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// }
-
-// func listTasks() {
-// 	rows, err := db.Query("SELECT id, title, description, completed, created_at, updated_at FROM tasks")
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer rows.Close()
-
-// 	var tasks []tasks.Task
-// 	for rows.Next() {
-// 		var t tasks.Task
-// 		if err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Completed, &t.CreatedAt, &t.UpdatedAt); err != nil {
-// 			log.Fatal(err)
-// 		}
-// 		tasks = append(tasks, t)
-// 	}
-
-// 	if len(tasks) == 0 {
-// 		fmt.Println("\nNo tasks found.")
-// 		return
-// 	}
-
-// 	fmt.Println("\nTask List:")
-// 	for _, t := range tasks {
-// 		duration := time.Since(t.CreatedAt).Hours()
-// 		status := "[ ]"
-// 		if t.Completed {
-// 			status = "[✔]"
-// 		}
-// 		fmt.Printf("%s %d: \033[1m%s\033[0m", status, t.ID, t.Title)
-// 		if t.Description != "" {
-// 			fmt.Printf(" - %s", t.Description)
-// 		}
-// 		fmt.Printf(" [Created: %s] [Updated: %s] [Hours since creation: %.2f]\n",
-// 			t.CreatedAt.Format("2006-01-02 15:04:05"), t.UpdatedAt.Format("2006-01-02 15:04:05"), duration)
-// 	}
-// 	fmt.Println()
-// }
-
-// func addTask(title, description string) {
-// 	_, err := db.Exec("INSERT INTO tasks (title, description, completed) VALUES (?, ?, 0)", title, description)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	fmt.Println("Task added successfully!")
-// }
-
-// func completeTask(id int) {
-// 	res, err := db.Exec("UPDATE tasks SET completed = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?", id)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	rowsAffected, _ := res.RowsAffected()
-// 	if rowsAffected == 0 {
-// 		fmt.Println("Task not found.")
-// 		return
-// 	}
-// 	fmt.Println("Task marked as completed!")
-// }
-
-// func undoTask(id int) {
-// 	res, err := db.Exec("UPDATE tasks SET completed = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?", id)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	rowsAffected, _ := res.RowsAffected()
-// 	if rowsAffected == 0 {
-// 		fmt.Println("Task not found.")
-// 		return
-// 	}
-// 	fmt.Println("Task marked as incomplete!")
-// }
-
-// func deleteTask(id int) {
-// 	res, err := db.Exec("DELETE FROM tasks WHERE id = ?", id)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	rowsAffected, _ := res.RowsAffected()
-// 	if rowsAffected == 0 {
-// 		fmt.Println("Task not found.")
-// 		return
-// 	}
-// 	fmt.Println("Task deleted successfully!")
-// }
-
-// func deleteCompletedTasks() {
-// 	res, err := db.Exec("DELETE FROM tasks WHERE completed = 1")
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	rowsAffected, _ := res.RowsAffected()
-// 	if rowsAffected == 0 {
-// 		fmt.Println("No completed tasks found.")
-// 		return
-// 	}
-// 	fmt.Println("All completed tasks deleted successfully!")
-// }
-
 func clearScreen() {
 	var cmd *exec.Cmd
 	if runtime.GOOS == "windows" {
@@ -179,7 +52,7 @@ func menuNavigation(tasksList []tasks.Task) int {
 		"Work on Task",
 		"Exit",
 	}
-	selected := 0
+	selected := 6
 
 	keyboard.Open()
 	defer keyboard.Close()
